@@ -1,11 +1,8 @@
 package streams
 
-import org.scalatest.FunSuite
-
 import org.junit.runner.RunWith
+import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
-
-import Bloxorz._
 
 @RunWith(classOf[JUnitRunner])
 class BloxorzSuite extends FunSuite {
@@ -75,5 +72,41 @@ class BloxorzSuite extends FunSuite {
       assert(solution.length == optsolution.length)
     }
   }
+
+  test("neighborsWithHistory") {
+    new Level1 {
+      val result = neighborsWithHistory(
+        Block(Pos(1,1),Pos(1,1)), List(Left,Up))
+      assert(result === Set((Block(Pos(1,2),Pos(1,3)), List(Right,Left,Up)),
+        (Block(Pos(2,1),Pos(3,1)), List(Down,Left,Up))).toStream)
+    }
+  }
+
+  test("newNeighborsOnly") {
+    new Level1 {
+      val result = newNeighborsOnly(
+        Set(
+          (Block(Pos(1,2),Pos(1,3)), List(Right,Left,Up)),
+          (Block(Pos(2,1),Pos(3,1)), List(Down,Left,Up))
+        ).toStream,
+        Set(Block(Pos(1,2),Pos(1,3)), Block(Pos(1,1),Pos(1,1)))
+      )
+      assert(result == Set(
+        (Block(Pos(2,1),Pos(3,1)), List(Down,Left,Up))
+      ).toStream)
+    }
+  }
+
+//  test("optimal solution for level 1") {
+//    new Level1 {
+//      val result = from(
+//        Set(
+//          (Block(Pos(1,2),Pos(1,3)), List(Right))
+//        ).toStream,
+//        Set(Block(Pos(1,2),Pos(1,3)), Block(Pos(1,1),Pos(1,1)))
+//      )
+//      result.take(2).toList
+//    }
+//  }
 
 }
